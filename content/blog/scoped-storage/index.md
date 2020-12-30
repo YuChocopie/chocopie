@@ -1,4 +1,5 @@
 ---
+
 title: Scoped Storage
 date: "2020-04-04"
 tags: ["Scoped Storage", "chocopie"]
@@ -6,7 +7,7 @@ description: ""
 cover: "./preview.jpg"
 ---# Scoped Storage
 
-사용자에게 파일에 대한 더 많은 권한을 주기 위해 앱 내부 디렉토리 및 앱에서 생성한 외부 디렉토리의 파일 외에는 접근이 제한
+> 사용자에게 파일에 대한 더 많은 권한을 주기 위해 앱 내부 디렉토리 및 앱에서 생성한 외부 디렉토리의 파일 외에는 접근이 제한
 
 ## 적용되는 버전
 
