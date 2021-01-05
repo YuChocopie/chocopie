@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "Yujoeng Kim <pointu341@gmail.com>",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-plugin-styled-components": "^1.10.0",
     "disqus-react": "^1.0.5",
     "dotenv": "^8.0.0",
