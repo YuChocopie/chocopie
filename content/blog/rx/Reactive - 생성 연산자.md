@@ -36,7 +36,7 @@ cover: "./ic_cover.png"
 
 interval() 함수는 일정 시간 간격으로 데이터 흐름을 생성합니다. 주어진 시간 간격만큼 Interval을 둔 정수 시퀀스를
 
-<img src="http://reactivex.io/documentation/operators/images/interval.c.png" alt="간격" style="zoom:67%;" />
+<img src="./images/interval.c.png" alt="간격" style="zoom:67%;" />
 
 주로 사용하는 원형에는 2가지가 있습니다.
 
@@ -99,7 +99,7 @@ RxComputationThreadPool-1 | 616 | value = 500
 
 timer() 함수는 interval()함수와 유사하지만 한번만 실행하는 함수입니다.
 
-<img src="http://reactivex.io/documentation/operators/images/timer.c.png" alt="Timer" style="zoom:67%;" />
+<img src="./images/timer.c.png" alt="Timer" style="zoom:67%;" />
 
 timer 함수의 원형은 interval()함수와 전반적으로 비슷하며, 현재스레드가 아닌 계산스케쥴러에서 실행하기 때문에 단독으로 사용하게 되는 경우 CommonUtils.sleep() 함수의 호출이 없으면 그냥 종료하게 됩니다.
 
@@ -113,7 +113,7 @@ public static Observable<Long> timer(long delay, TimeUnit unit)
 
 range() 함수는 주어진 값 n부터 m개의 Integer 객체를 발행합니다. 앞선 interval()함수와 timer()함수는 Long를 발행했지만 range()하뭇는 Integer 객체를 발행하는 것이 다릅니다.
 
-<img src="http://reactivex.io/documentation/operators/images/range.c.png" alt="Range" style="zoom:67%;" />
+<img src="./images/range.c.png" alt="Range" style="zoom:67%;" />
 
 range() 함수의 원형을 보면 앞선 함수들과는 다르게 스케쥴러에서 실행되지 않아 현재 스레드에서 동작합니다.
 
@@ -180,11 +180,19 @@ public void makeWithInterval() {
 ### 5. defer() 함수
 
 defer()함수는 timer()함수와 비슷하지만 데이터 흐름 생성을 구독자가 subscribe() 함수를 호출할 때까지 미룰 수 있습니다.
-<img src="http://reactivex.io/documentation/operators/images/defer.c.png" alt="Defer" style="zoom:67%;" />
 
-Observeble의 생성이 구독할 때까지 미뤄지기 때문에 최신 데이터를 얻을 수 있습니다.
+defer() 연산자는 옵저버가 구독 할 때까지 기다린 다음 Observable factory 함수를 사용해서 옵저버를 생성합니다.
+
+각 구독자에 대해 해당 작업을 수행하기 때문에 구독자가 동일한 옵저버블을 구독하고 있다고 생각할 수 있지만, 실제로는 **각 구독자는 고유한 개별 시퀀스를 받습니다**(그래서 아래 그림에서 2가지 시퀀스가 발행). 경우에 따라 Observable을 생성하기 위해 마지막순간까지 기다게되면 옵저버블에 최신 데이터가 포함되도록 할 수 있습니다.
+
+<img src="./images/defer.c.png" alt="Defer" style="zoom:67%;" />
+defer() 는 Observeble의 생성이 구독할 때까지 미뤄지기 때문에 최신 데이터를 얻을 수 있습니다.
+
+> **구독자가 subscribe() 를 호출하면 그 때 supplier의 call() 메서드를 호출합니다(데이터의 발행이 구독시점부터 시작한다고 생각하면 됩니다**.)
 
 스케줄러 NONE 이기 때문에 메인스레드에서 동작하며 인자로는 **Callable<Observable<T>>**를 받습니다. **Callable 객체**이기 때문에 subscribe() 함수를 호출할 때까지 call 메서드의 호출을 미룰 수 있게 됩니다.
+
+> _callable_ 은 비동기 작업이 일어난 경우에 해당 작업의 값을 변수로 받을 수 있게 되는 것 입니다
 
 ```java
 @CheckReturnValue
@@ -192,11 +200,18 @@ Observeble의 생성이 구독할 때까지 미뤄지기 때문에 최신 데이
 public static <T> Observable<T> defer(Callable<? extends ObservableSource<? extends T>> supplier)
 ```
 
+> fromCallable 함수
+>
+> - defer() 함수와 마찬가지로 스트림 생성을 지연하는 효과를 가지고 있고 Observable 에서 데이터를 방출할 때 추가로 Observable을 생성하지 않고 바로 데이터를 스트림으로 전달할 수 있습니다.
+>   fromCallable에서는 Observable을 한 번만 생성하여 defer의 효과를 그대로 가져갈 수 있는 장점이있습니다.
+>
+> <img src="./images/from.c.png" alt="From" style="zoom:67%;" />
+
 ### 6.repeat() 함수
 
 단순히 반복실행을 합니다. 주로 서버가 잘 살아있는지 확인(ping, heart beat 라고 한다) 하는 코드에 사용하게 된다.
 
-<img src="http://reactivex.io/documentation/operators/images/repeat.c.png" alt="Repeat" style="zoom:67%;" />
+<img src="./images/repeat.c.png" alt="Repeat" style="zoom:67%;" />
 
 ```java
 String[] balls = {"1", "3", "5"};
@@ -256,3 +271,7 @@ RxComputationThreadPool-4 | 8977 | value = Ping Result : Approachable is better 
 원래 timer() 함수는 한번 실행하고 종료되지만 repeat() 함수로 인해 동작이 한 번 끝난 다음에 다시 구독하여 반복 실행되게 됩니다. 그리고 다시 구독할 때마다 동작하는 스레드의 번호가 달라집니다.
 
 > 만약 동작하는 스레드를 동일하게 맞추려면 timer()와 repeat() 함수를 빼고 interval() 함수를 대신 넣어 호출하면 됩니다.
+
+reference
+
+http://reactivex.io
