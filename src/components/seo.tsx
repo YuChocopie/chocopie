@@ -105,7 +105,7 @@ const SEO: React.FunctionComponent<SEOProps> = ({
 SEO.defaultProps = {
   lang: `ko`,
   meta: [],
-  keywords: ["yuchocopie","mashup","android developer"],
+  keywords: ["yuchocopie","mashup","android","developer"],
   description: `춤추는 개발자 유초코의 블로그 입니다.`,
 }
 
