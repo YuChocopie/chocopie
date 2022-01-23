@@ -8,7 +8,7 @@ cover: "./ic_cover.png"
 
 오늘 글에서는 RecyclerView의 list 관리를 효율적으로 다룰 수 있는 ListAdapter에 대해 살펴보려 합니다
 
-먼저, 아래 그래픽은 RecyclerView, Adapter, ViewHolder 및 데이터가 모두 함께 작동하는 방식을 보여주는데요 각각 다음의 역할을 가지고 있습니다.
+먼저, 아래 그래픽은 RecyclerView, Adapter, ViewHolder 및 데이터가 모두 함께 작동하는 방식을 보여주는데요 각각 다음의 역할을 가지고 있습니다
 
 <img src = "https://miro.medium.com/max/1448/0*tWzfsXa2-NP_WmSA" width="80%">
 
